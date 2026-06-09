@@ -77,6 +77,17 @@
   .loading{text-align:center;padding:60px;color:var(--muted)}
   @media(max-width:760px){.charts{grid-template-columns:1fr}.hide-sm{display:none}}
 </style>
+<script>
+window.addEventListener('error',function(e){
+  var r=document.getElementById('root');
+  if(r && !r.innerHTML.trim()){
+    r.innerHTML='<div style="max-width:520px;margin:80px auto;background:#fff;border:1px solid #d9e6e8;border-radius:16px;padding:30px;text-align:center;font-family:Tajawal,sans-serif">'+
+    '<h2 style="color:#0d5566;margin-bottom:10px">تعذّر تحميل اللوحة</h2>'+
+    '<p style="color:#6b7785;line-height:1.8">قد يكون السبب ضعف الاتصال أو فتح الملف مباشرة من الجهاز.<br>افتح اللوحة من رابط Vercel، وتأكد من اتصالك بالإنترنت، ثم حدّث الصفحة.</p>'+
+    '<p style="color:#d9534f;font-size:12px;margin-top:14px;direction:ltr">'+(e.message||'')+'</p></div>';
+  }
+});
+</script>
 </head>
 <body>
 <div id="root"></div>
@@ -236,10 +247,13 @@ function exportExcel(rows){
 
 function Dashboard(){
   const [rows,setRows]=useState(null); const [sel,setSel]=useState(null);
+  const [loadErr,setLoadErr]=useState(null);
   const [q,setQ]=useState(''); const [ft,setFt]=useState(''); const [fr,setFr]=useState('');
   useEffect(()=>{ (async()=>{
-    const {data,error}=await sb.from('submissions').select('*').order('created_at',{ascending:false});
-    setRows(error?[]:(data||[]));
+    try{
+      const {data,error}=await sb.from('submissions').select('*').order('created_at',{ascending:false});
+      if(error){setLoadErr(error.message);setRows([])} else setRows(data||[]);
+    }catch(e){setLoadErr(String(e.message||e));setRows([])}
   })() },[]);
 
   const filtered=useMemo(()=>{
@@ -277,6 +291,9 @@ function Dashboard(){
       </div></div>
 
       <div className="wrap">
+        {loadErr&&<div style={{background:'#f8e0df',border:'1px solid #d9534f',color:'#922',borderRadius:12,padding:'12px 16px',margin:'16px 0',fontSize:14}}>
+          تعذّر تحميل البيانات من قاعدة البيانات: {loadErr}
+        </div>}
         <div className="stats">
           <Stat n={rows.length} l="إجمالي الاستبيانات"/>
           <Stat n={avg} l="متوسط الجاهزية"/>
