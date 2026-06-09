@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوصلة الاستراتيجية — مُشار للاستشارات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2b3c; --deep:#0d5566; --teal:#127a8a; --teal-soft:#e7f3f4;
+    --gold:#2a93a3; --gold-soft:#eaf5f6; --paper:#f4f8f9; --line:#d9e6e8;
+    --muted:#6b7785; --shadow:0 10px 40px -12px rgba(13,59,79,.22);
+    --font-body:'Tajawal',sans-serif;
+    --font-display:'Tajawal',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body); font-size:17px;
+    background:var(--paper);
+    color:var(--ink); line-height:1.75; min-height:100vh; padding:0 0 80px;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:0 20px}
+  header{text-align:center;padding:54px 24px 48px;background:linear-gradient(160deg,var(--deep) 0%,var(--teal) 100%);border-radius:0 0 28px 28px;box-shadow:0 14px 44px -16px rgba(13,85,102,.55);position:relative;overflow:hidden}
+  header::after{content:'';position:absolute;inset:0;background:radial-gradient(700px 320px at 80% -10%,rgba(255,255,255,.12),transparent 60%);pointer-events:none}
+  .logo-card{display:inline-flex;background:#fff;padding:16px 32px;border-radius:18px;box-shadow:0 14px 36px -12px rgba(0,0,0,.32);margin-bottom:18px;position:relative;z-index:1}
+  .logo{height:54px;width:auto;display:block}
+  .tagline{color:rgba(255,255,255,.85);font-size:16px;margin-top:4px;position:relative;z-index:1}
+  .hline{width:72px;height:3px;border-radius:3px;background:rgba(255,255,255,.65);margin:18px auto 0;position:relative;z-index:1}
+  .title{font-family:var(--font-display);font-size:32px;color:#fff;margin-top:22px;font-weight:800;position:relative;z-index:1}
+  .subtitle{color:rgba(255,255,255,.88);font-size:16px;max-width:600px;margin:10px auto 0;position:relative;z-index:1}
+
+  .progress-shell{position:sticky;top:0;z-index:50;background:rgba(244,248,249,.96);backdrop-filter:blur(8px);padding:16px 0 12px;border-bottom:1px solid var(--line);margin:18px 0 30px}
+  .stepper{display:flex;align-items:flex-start;justify-content:space-between;max-width:560px;margin-inline:auto;position:relative;flex-wrap:nowrap}
+  .stepper::before{content:'';position:absolute;top:18px;right:8%;left:8%;height:2px;background:var(--line);z-index:0}
+  .stepper-fill{position:absolute;top:18px;right:8%;height:2px;background:var(--teal);z-index:1;transition:width .4s ease;width:0}
+  .step{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1 1 0}
+  .step .dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#fff;border:2px solid var(--line);color:var(--muted);font-weight:700;font-size:15px;transition:.3s}
+  .step .lbl{font-size:12px;color:var(--muted);font-weight:500;text-align:center;transition:.3s;max-width:80px;line-height:1.35}
+  .step.active .dot{background:var(--deep);border-color:var(--deep);color:#fff;box-shadow:0 0 0 5px var(--teal-soft)}
+  .step.active .lbl{color:var(--deep);font-weight:700}
+  .step.done .dot{background:var(--teal);border-color:var(--teal);color:#fff}
+  .step.done .lbl{color:var(--teal)}
+  @media(max-width:560px){
+    .stepper{max-width:100%}
+    .stepper::before,.stepper-fill{top:15px}
+    .step .dot{width:32px;height:32px;font-size:13px}
+    .step .lbl{font-size:10px;max-width:60px}
+  }
+
+  .section{display:none;animation:fade .4s ease}
+  .section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow);margin-bottom:22px}
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .sec-num{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;color:#fff;font-weight:700;font-family:var(--font-display);font-size:19px;background:linear-gradient(135deg,var(--deep),var(--teal))}
+  .sec-title{font-family:var(--font-display);font-size:23px;color:var(--ink);font-weight:700}
+  .sec-desc{color:var(--muted);font-size:15px;margin:4px 0 24px;padding-inline-start:56px}
+
+  .q{margin-bottom:22px;animation:fade .3s ease}
+  label.q-label{display:block;font-weight:700;font-size:17px;margin-bottom:9px;color:var(--ink)}
+  .req{color:var(--gold);font-weight:700}
+  .hint{font-size:14px;color:var(--muted);font-weight:400;margin-inline-start:4px}
+
+  input[type=text],input[type=number],input[type=date],input[type=email],input[type=tel],select,textarea{
+    width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:11px;font-family:inherit;font-size:16px;background:#fff;color:var(--ink);transition:.2s}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-soft)}
+  textarea{resize:vertical;min-height:88px}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%236b7785' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 15px center;padding-left:40px}
+
+  .choices{display:flex;flex-wrap:wrap;gap:9px}
+  .choices.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+  .chip{position:relative;cursor:pointer}
+  .chip input{position:absolute;opacity:0;width:0;height:0}
+  .chip span{display:block;padding:11px 16px;border:1.5px solid var(--line);border-radius:11px;font-size:15px;background:#fff;transition:.2s;font-weight:500;text-align:center}
+  .chip:hover span{border-color:var(--teal)}
+  .chip input:checked+span{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+  .conditional{border-inline-start:3px solid var(--gold);background:var(--gold-soft);border-radius:0 12px 12px 0;padding:18px 18px 4px;margin-top:14px;display:none;animation:fade .35s ease}
+  .conditional.show{display:block}
+  .other-field{display:none;margin-top:10px;animation:fade .3s}
+  .other-field.show{display:block}
+  .private-only{display:none}
+
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:8px}
+  button.btn{font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;padding:13px 30px;border-radius:12px;border:none;transition:.2s}
+  .btn-next{background:linear-gradient(135deg,var(--deep),var(--teal));color:#fff;box-shadow:var(--shadow)}
+  .btn-next:hover{transform:translateY(-2px)}
+  .btn-back{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-back:hover{border-color:var(--muted)}
+  .btn-submit{background:linear-gradient(135deg,var(--teal),var(--deep));color:#fff;width:100%;padding:16px;font-size:17px;box-shadow:var(--shadow);margin-top:6px}
+  .btn-submit:hover{transform:translateY(-2px)}
+
+  .err{border-color:#d9534f !important;box-shadow:0 0 0 4px #f8e0df !important}
+  .err-msg{color:#d9534f;font-size:14px;margin-top:6px;display:none}
+
+  .done-screen{display:none;text-align:center;padding:40px 20px;animation:fade .5s}
+  .done-screen.show{display:block}
+  .check{width:84px;height:84px;border-radius:50%;margin:0 auto 20px;background:var(--teal-soft);display:grid;place-items:center}
+  .check svg{width:42px;height:42px;stroke:var(--teal);stroke-width:3;fill:none}
+  .done-screen h2{font-family:var(--font-display);color:var(--deep);font-size:26px;margin-bottom:8px}
+  .done-screen p{color:var(--muted);max-width:460px;margin:0 auto 24px;font-size:16px}
+  .json-box{background:var(--ink);color:#cfe3e6;text-align:left;direction:ltr;border-radius:12px;padding:18px;font-family:monospace;font-size:12.5px;max-height:260px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+  footer{text-align:center;color:var(--muted);font-size:14px;margin-top:30px}
+  .footer-portfolio{font-family:var(--font-display);color:var(--deep);font-weight:700;font-size:16px;margin-bottom:4px}
+  header .footer-portfolio{color:#fff;position:relative;z-index:1}
+  @media(max-width:560px){.card{padding:22px}.sec-desc{padding-inline-start:0}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-card"><img class="logo" src="data:image/jpeg;base64,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" alt="مُشار للاستشارات"></div>
+  <div class="footer-portfolio">محفظة الاستراتيجية والتحول</div>
+  <div class="tagline">شريكك في بناء الاستراتيجية وإدارة الأداء</div>
+  <div class="hline"></div>
+  <h1 class="title">بوصلة الاستراتيجية</h1>
+  <p class="subtitle">يساعدنا هذا الاستبيان على فهم منظمتكم بدقة وتحديد احتياجكم بوضوح. أجيبوا بما تعرفونه؛ لا توجد إجابة صحيحة أو خاطئة، والهدف فهم وضعكم الحالي فقط.</p>
+</header>
+
+<div class="progress-shell">
+  <div class="wrap">
+    <div class="stepper" id="stepper">
+      <div class="stepper-fill" id="stepperFill"></div>
+      <div class="step active" data-s="1"><div class="dot">1</div><div class="lbl">بيانات التواصل</div></div>
+      <div class="step" data-s="2"><div class="dot">2</div><div class="lbl">التعريف بالمنظمة</div></div>
+      <div class="step" data-s="3"><div class="dot">3</div><div class="lbl">الهدف والتوقعات</div></div>
+      <div class="step" data-s="4"><div class="dot">4</div><div class="lbl">وضعكم الحالي</div></div>
+      <div class="step" data-s="5"><div class="dot">5</div><div class="lbl">لمسة أخيرة</div></div>
+    </div></div>
+  </div>
+</div>
+
+<div class="wrap">
+<form id="form" novalidate>
+
+<!-- ============ SECTION 1 : بيانات التواصل (نُقلت للبداية) ============ -->
+<section class="section show" data-section="1">
+  <div class="card">
+    <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">بيانات التواصل</div></div>
+    <p class="sec-desc">نبدأ بالتعريف بكم لنتمكن من التواصل وإرسال التصور المناسب.</p>
+
+    <div class="q">
+      <label class="q-label">اسم المسؤول <span class="req">*</span></label>
+      <input type="text" name="contact_name" data-req placeholder="الاسم الكامل">
+      <div class="err-msg">مطلوب</div>
+    </div>
+    <div class="q">
+      <label class="q-label">المسمى الوظيفي</label>
+      <input type="text" name="contact_title" placeholder="مثال: مدير التخطيط">
+    </div>
+    <div class="q">
+      <label class="q-label">البريد الإلكتروني <span class="req">*</span></label>
+      <input type="email" name="contact_email" data-req placeholder="name@entity.sa" dir="ltr" style="text-align:right">
+      <div class="err-msg">يرجى إدخال بريد صحيح</div>
+    </div>
+    <div class="q">
+      <label class="q-label">رقم الجوال</label>
+      <input type="tel" name="contact_phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:right">
+    </div>
+
+    <div class="nav"><span></span><button type="button" class="btn btn-next" data-next>التالي ←</button></div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 : التعريف بالمنظمة ============ -->
+<section class="section" data-section="2">
+  <div class="card">
+    <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">التعريف بالمنظمة</div></div>
+    <p class="sec-desc">نتعرّف على هوية منظمتكم وحجمها وانتشارها.</p>
+
+    <div class="q">
+      <label class="q-label">اسم المنظمة <span class="req">*</span></label>
+      <input type="text" name="entity_name" data-req placeholder="مثال: شركة / جمعية / جهة ...">
+      <div class="err-msg">هذا الحقل مطلوب</div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">نوع المنظمة <span class="req">*</span></label>
+      <select name="entity_type" id="entity_type" data-req data-other="entity_type_other_f">
+        <option value="">اختر النوع…</option>
+        <option value="حكومي">حكومي</option>
+        <option value="خاص">قطاع خاص</option>
+        <option value="غير ربحي">غير ربحي</option>
+        <option value="شبه حكومي">شبه حكومي</option>
+        <option value="أخرى">أخرى…</option>
+      </select>
+      <div class="err-msg">يرجى اختيار نوع المنظمة</div>
+      <div class="other-field" id="entity_type_other_f"><input type="text" name="entity_type_other" placeholder="حدّد نوع المنظمة"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">القطاع / المجال <span class="req">*</span></label>
+      <select name="sector" id="sector" data-req data-other="sector_other_f">
+        <option value="">اختر القطاع…</option>
+        <option>الصحة</option><option>التعليم</option><option>المالية والبنوك</option>
+        <option>العقار والإنشاءات</option><option>التقنية والاتصالات</option>
+        <option>التجزئة والتجارة</option><option>الصناعة والتصنيع</option>
+        <option>النقل واللوجستيات</option><option>السياحة والترفيه</option>
+        <option>القطاع غير الربحي والخيري</option><option>الخدمات الحكومية</option>
+        <option value="أخرى">أخرى…</option>
+      </select>
+      <div class="err-msg">يرجى اختيار القطاع</div>
+      <div class="other-field" id="sector_other_f"><input type="text" name="sector_other" placeholder="حدّد القطاع / المجال"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">سنة التأسيس</label>
+      <input type="number" name="founded" placeholder="مثال: 2015" min="1900" max="2026" dir="ltr" style="text-align:right">
+    </div>
+
+    <div class="q">
+      <label class="q-label">عدد الموظفين الحالي <span class="req">*</span></label>
+      <select name="employees" data-req>
+        <option value="">اختر الشريحة…</option>
+        <option value="&lt;50">أقل من 50</option>
+        <option value="50-200">50 – 200</option>
+        <option value="201-500">201 – 500</option>
+        <option value="501-1000">501 – 1000</option>
+        <option value="&gt;1000">أكثر من 1000</option>
+      </select>
+      <div class="err-msg">يرجى اختيار شريحة عدد الموظفين</div>
+    </div>
+
+    <div class="q private-only" data-show="خاص">
+      <label class="q-label">رأس المال (نطاق)</label>
+      <select name="capital">
+        <option value="">اختر النطاق…</option>
+        <option>أقل من مليون ريال</option><option>1 – 10 مليون ريال</option>
+        <option>10 – 50 مليون ريال</option><option>50 – 200 مليون ريال</option>
+        <option>أكثر من 200 مليون ريال</option>
+      </select>
+    </div>
+
+    <div class="q">
+      <label class="q-label">الموقع الرئيسي (المدينة) <span class="req">*</span></label>
+      <select name="hq_city" id="hq_city" data-req data-other="hq_city_other_f">
+        <option value="">اختر المدينة…</option>
+        <option>الرياض</option><option>جدة</option><option>مكة المكرمة</option>
+        <option>المدينة المنورة</option><option>الدمام</option><option>الخبر</option>
+        <option>الأحساء</option><option>أبها</option><option>تبوك</option>
+        <option>بريدة</option><option>حائل</option><option>جازان</option><option>نجران</option>
+        <option>الباحة</option><option>عرعر</option><option>سكاكا</option><option value="أخرى">أخرى…</option>
+      </select>
+      <div class="err-msg">يرجى اختيار المدينة</div>
+      <div class="other-field" id="hq_city_other_f"><input type="text" name="hq_city_other" placeholder="حدّد المدينة"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل لديكم فروع؟ <span class="req">*</span></label>
+      <select name="has_branches" id="has_branches" data-req>
+        <option value="">اختر…</option><option value="نعم">نعم</option><option value="لا">لا</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+      <div class="conditional" id="branches_block">
+        <div class="q">
+          <label class="q-label">كم عدد الفروع؟</label>
+          <input type="number" name="branches_count" min="1" placeholder="مثال: 7" dir="ltr" style="text-align:right">
+        </div>
+        <div class="q">
+          <label class="q-label">في أي مناطق؟ <span class="hint">(اختيار متعدد)</span></label>
+          <div class="choices grid" data-check="regions">
+            <label class="chip"><input type="checkbox" name="regions" value="الرياض"><span>الرياض</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="مكة المكرمة"><span>مكة المكرمة</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="المدينة المنورة"><span>المدينة المنورة</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="الشرقية"><span>الشرقية</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="القصيم"><span>القصيم</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="عسير"><span>عسير</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="تبوك"><span>تبوك</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="حائل"><span>حائل</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="جازان"><span>جازان</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="نجران"><span>نجران</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="الباحة"><span>الباحة</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="الحدود الشمالية"><span>الحدود الشمالية</span></label>
+            <label class="chip"><input type="checkbox" name="regions" value="الجوف"><span>الجوف</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل لديكم موقع أو متجر إلكتروني للبيع؟ <span class="req">*</span></label>
+      <select name="has_ecommerce" data-req>
+        <option value="">اختر…</option>
+        <option>نعم، متجر إلكتروني فعّال</option>
+        <option>نعم، لكنه محدود</option>
+        <option>لا يوجد</option>
+        <option>لا ينطبق على نشاطنا</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+    </div>
+
+    <!-- ===== ملف النشاط التجاري (القطاع الخاص فقط) ===== -->
+    <div class="private-only" data-show="خاص">
+      <div class="q">
+        <label class="q-label">ماذا تقدّمون بشكل أساسي؟</label>
+        <select name="biz_offering">
+          <option value="">اختر…</option>
+          <option>منتجات</option>
+          <option>خدمات</option>
+          <option>منتجات وخدمات معًا</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <label class="q-label">صِفوا أبرز منتجاتكم أو خدماتكم</label>
+        <p class="hint" style="margin-bottom:8px">باختصار، ما طبيعة ما تقدّمونه للسوق.</p>
+        <textarea name="biz_description" placeholder="مثال: تصنيع وبيع المراتب الطبية والفندقية والمفروشات…"></textarea>
+      </div>
+
+      <div class="q">
+        <label class="q-label">هل لديكم تصنيع أو خطوط إنتاج؟</label>
+        <select name="has_manufacturing" id="has_manufacturing" data-other="manufacturing_other_f">
+          <option value="">اختر…</option>
+          <option>نعم، تصنيع محلي</option>
+          <option>نعم، عبر تصنيع مستورد / خارجي</option>
+          <option>نعم، تصنيع محلي ومستورد معًا</option>
+          <option>لا، نشتري جاهزًا ونعيد البيع</option>
+          <option value="أخرى">أخرى…</option>
+        </select>
+        <div class="other-field" id="manufacturing_other_f"><input type="text" name="has_manufacturing_other" placeholder="حدّد طبيعة الإنتاج"></div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">كيف تصفون تعاملكم مع الموردين؟</label>
+        <select name="suppliers">
+          <option value="">اختر…</option>
+          <option>نعتمد على مورد رئيسي واحد</option>
+          <option>عدد محدود من الموردين الاستراتيجيين</option>
+          <option>قاعدة موردين متنوعة</option>
+          <option>لا ينطبق (تصنيع ذاتي بالكامل)</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <label class="q-label">هل أنتم ضمن مجموعة أو لديكم شركات شقيقة؟</label>
+        <select name="group_structure" id="group_structure">
+          <option value="">اختر…</option>
+          <option value="نعم">نعم</option>
+          <option value="لا">لا، كيان مستقل</option>
+        </select>
+        <div class="conditional" id="group_block">
+          <div class="q" style="margin-bottom:6px">
+            <label class="q-label">كم عدد الشركات الشقيقة تقريبًا؟</label>
+            <input type="number" name="group_count" min="1" placeholder="مثال: 3" dir="ltr" style="text-align:right">
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">من هم عملاؤكم بشكل أساسي؟</label>
+        <select name="customer_type">
+          <option value="">اختر…</option>
+          <option>أفراد (B2C)</option>
+          <option>منشآت وشركات (B2B)</option>
+          <option>أفراد ومنشآت معًا</option>
+          <option>جهات حكومية</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <label class="q-label">ما حجم قاعدة عملائكم تقريبًا؟ <span class="hint">(نطاق تقديري)</span></label>
+        <select name="customer_base">
+          <option value="">اختر النطاق…</option>
+          <option>أقل من 500</option>
+          <option>500 – 5,000</option>
+          <option>5,000 – 50,000</option>
+          <option>50,000 – 500,000</option>
+          <option>أكثر من 500,000</option>
+          <option>غير معروف بدقة</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <label class="q-label">عبر أي قنوات تبيعون؟ <span class="hint">(اختيار متعدد)</span></label>
+        <div class="choices grid" data-check="sales_channels">
+          <label class="chip"><input type="checkbox" name="sales_channels" value="فروع / معارض"><span>فروع / معارض</span></label>
+          <label class="chip"><input type="checkbox" name="sales_channels" value="متجر إلكتروني"><span>متجر إلكتروني</span></label>
+          <label class="chip"><input type="checkbox" name="sales_channels" value="بيع بالجملة"><span>بيع بالجملة</span></label>
+          <label class="chip"><input type="checkbox" name="sales_channels" value="موزّعون / وكلاء"><span>موزّعون / وكلاء</span></label>
+          <label class="chip"><input type="checkbox" name="sales_channels" value="مبيعات مباشرة"><span>مبيعات مباشرة</span></label>
+          <label class="chip"><input type="checkbox" name="sales_channels" value="منصات خارجية"><span>منصات خارجية</span></label>
+        </div>
+        <div class="other-field show" style="margin-top:10px"><input type="text" name="sales_channels_other" placeholder="قناة أخرى (اختياري)…"></div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-back" data-back>→ السابق</button>
+      <button type="button" class="btn btn-next" data-next>التالي ←</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3 : الهدف والتوقعات ============ -->
+<section class="section" data-section="3">
+  <div class="card">
+    <div class="sec-head"><div class="sec-num">3</div><div class="sec-title">الهدف من المشروع والتوقعات</div></div>
+    <p class="sec-desc">نفهم الغرض الأساسي من المشروع، والقرارات التي تريدون اتخاذها، وما تتوقعون الحصول عليه.</p>
+
+    <div class="q">
+      <label class="q-label">ما الهدف الأساسي من المشروع؟ <span class="req">*</span></label>
+      <select name="strategy_goal" id="strategy_goal" data-req data-other="strategy_goal_other_f">
+        <option value="">اختر الهدف…</option>
+        <option>النمو والتوسع وزيادة الحصة في السوق</option>
+        <option>تحسين الأرباح وتقليل التكاليف</option>
+        <option>إعادة ترتيب المنظمة وتطوير طريقة عملها</option>
+        <option>تعزيز الاستدامة المالية واستمرارية المنظمة</option>
+        <option>تحسين جودة الخدمات وكفاءة العمل اليومي</option>
+        <option>مواكبة التوجهات الوطنية ورؤية 2030</option>
+        <option value="أخرى">أخرى…</option>
+      </select>
+      <div class="err-msg">يرجى اختيار الهدف</div>
+      <div class="other-field" id="strategy_goal_other_f"><input type="text" name="strategy_goal_other" placeholder="حدّد الهدف الأساسي"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">من طلب هذا المشروع داخل المنظمة؟ <span class="req">*</span></label>
+      <select name="requester" id="requester" data-req data-other="requester_other_f">
+        <option value="">اختر…</option>
+        <option>مجلس الإدارة</option>
+        <option>الرئيس التنفيذي / المدير العام</option>
+        <option>إدارة التخطيط</option>
+        <option value="أخرى">جهة أخرى…</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+      <div class="other-field" id="requester_other_f"><input type="text" name="requester_other" placeholder="حدّد الجهة الطالبة"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">من الذي سيعتمد المشروع بشكل نهائي؟ <span class="req">*</span></label>
+      <select name="approver" id="approver" data-req data-other="approver_other_f">
+        <option value="">اختر…</option>
+        <option>مجلس الإدارة</option>
+        <option>الرئيس التنفيذي / المدير العام</option>
+        <option>لجنة مختصة</option>
+        <option>غير محدد بعد</option>
+        <option value="أخرى">أخرى…</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+      <div class="other-field" id="approver_other_f"><input type="text" name="approver_other" placeholder="حدّد جهة الاعتماد"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">ما أهم القرارات التي تأملون اتخاذها بعد المشروع؟ <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:8px">اكتبوا أهم 2–3 قرارات تتوقعون أن يساعدكم المشروع في حسمها (مثال: فتح سوق جديد، تطوير أو إغلاق فرع، إطلاق خدمة، تغيير طريقة الصرف).</p>
+      <textarea name="key_decisions" data-req placeholder="اكتبوا أهم القرارات المتوقعة…"></textarea>
+      <div class="err-msg">يرجى كتابة القرارات المتوقعة</div>
+    </div>
+
+    <!-- سؤال نوعي: النجاح كيف يبدو -->
+    <div class="q">
+      <label class="q-label">تخيّلوا أن المشروع انتهى بنجاح باهر بعد سنة — ما الذي تغيّر فعليًا في منظمتكم؟ <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:8px">صِفوا الصورة التي تتمنّونها بعد النجاح (هذا يساعدنا على فهم توقعكم الحقيقي).</p>
+      <textarea name="success_vision" data-req placeholder="مثال: صار لدينا وضوح في الأولويات، وارتفعت إيرادات الفروع، واتخذنا قرارات أسرع…"></textarea>
+      <div class="err-msg">يرجى وصف صورة النجاح</div>
+    </div>
+
+    <!-- سؤال نوعي: الألم -->
+    <div class="q">
+      <label class="q-label">ما الموقف أو القرار الذي تعثّرتم فيه مؤخرًا وجعلكم تشعرون بالحاجة لهذا المشروع؟</label>
+      <p class="hint" style="margin-bottom:8px">الموقف الذي أشعركم أن الوضع الحالي لم يعد كافيًا.</p>
+      <textarea name="pain_point" placeholder="اكتبوا الموقف أو التحدي الذي دفعكم لطلب المشروع…"></textarea>
+    </div>
+
+    <div class="q">
+      <label class="q-label">ما المدة الزمنية التي تريدون أن تغطيها الخطة؟</label>
+      <select name="horizon">
+        <option value="">اختر…</option>
+        <option>3 سنوات</option><option>5 سنوات</option>
+        <option>أكثر من 5 سنوات</option><option>غير محدد</option>
+      </select>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل توجد ميزانية معتمدة للمشروع؟ <span class="req">*</span></label>
+      <select name="budget" data-req>
+        <option value="">اختر…</option>
+        <option>نعم، معتمدة</option><option>قيد الاعتماد</option><option>لا توجد بعد</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">الموعد المرغوب لإنجاز المشروع؟</label>
+      <input type="date" name="deadline">
+    </div>
+
+    <div class="q">
+      <label class="q-label">من أصحاب المصلحة الأساسيين الذين يجب إشراكهم في المشروع؟ <span class="hint">(اختيار متعدد)</span></label>
+      <div class="choices grid" data-check="stakeholders">
+        <label class="chip"><input type="checkbox" name="stakeholders" value="مجلس الإدارة"><span>مجلس الإدارة</span></label>
+        <label class="chip"><input type="checkbox" name="stakeholders" value="الإدارة التنفيذية"><span>الإدارة التنفيذية</span></label>
+        <label class="chip"><input type="checkbox" name="stakeholders" value="مدراء الإدارات"><span>مدراء الإدارات</span></label>
+        <label class="chip"><input type="checkbox" name="stakeholders" value="الموظفون"><span>الموظفون</span></label>
+        <label class="chip"><input type="checkbox" name="stakeholders" value="جهات إشرافية"><span>جهات إشرافية / تنظيمية</span></label>
+        <label class="chip"><input type="checkbox" name="stakeholders" value="شركاء وموردون"><span>شركاء وموردون</span></label>
+      </div>
+      <div class="other-field show" style="margin-top:10px"><input type="text" name="stakeholders_other" placeholder="أصحاب مصلحة آخرون (اختياري)…"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">ما مدى توفّر فريقكم للاجتماعات وتزويدنا بالمعلومات أثناء المشروع؟ <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:8px">يساعدنا على وضع جدول زمني واقعي.</p>
+      <select name="team_availability" data-req>
+        <option value="">اختر…</option>
+        <option>متوفر بشكل جيد ومتفرّغ للمشروع</option>
+        <option>متوفر بشكل معقول مع بعض الانشغال</option>
+        <option>محدود التوفّر بسبب ضغط العمل</option>
+        <option>غير محدد بعد</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-back" data-back>→ السابق</button>
+      <button type="button" class="btn btn-next" data-next>التالي ←</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 4 : وضعكم الحالي ============ -->
+<section class="section" data-section="4">
+  <div class="card">
+    <div class="sec-head"><div class="sec-num">4</div><div class="sec-title">وضعكم الحالي</div></div>
+    <p class="sec-desc">أسئلة بسيطة عن وضعكم اليوم، تساعدنا على تحديد من أين نبدأ ومدى التفصيل المطلوب.</p>
+
+    <div class="q">
+      <label class="q-label">هل لديكم رؤية ورسالة وقيم مكتوبة ومعتمدة؟ <span class="req">*</span></label>
+      <select name="has_vision" id="has_vision" data-req>
+        <option value="">اختر…</option><option value="نعم">نعم</option><option value="لا">لا</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+      <div class="conditional" id="vision_block">
+        <div class="q" style="margin-bottom:6px">
+          <label class="q-label">هل تحتاج إلى تحديث أو مراجعة؟</label>
+          <select name="vision_update">
+            <option value="">اختر…</option>
+            <option>نعم، تحتاج تحديثًا</option><option>لا، حديثة وكافية</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل سبق أن وضعتم خطة ولم تُنفّذ كما يجب؟ <span class="req">*</span></label>
+      <select name="prev_strategy" id="prev_strategy" data-req>
+        <option value="">اختر…</option><option value="نعم">نعم</option><option value="لا">لا</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+      <div class="conditional" id="prev_block">
+        <div class="q" style="margin-bottom:6px">
+          <label class="q-label">ما السبب الأبرز في رأيكم؟</label>
+          <textarea name="prev_reason" placeholder="مثال: انشغال القيادة، نقص الكوادر، عدم ربط الخطة بالميزانية، مقاومة التغيير…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">ما مدى التزام القيادة العليا بدعم المشروع وتبنّي مخرجاته؟ <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:8px">التزام القيادة من أهم عوامل نجاح أي مشروع استراتيجي.</p>
+      <select name="leadership_commitment" data-req>
+        <option value="">اختر…</option>
+        <option>التزام كامل ومتابعة مباشرة من القيادة</option>
+        <option>دعم جيد مع متابعة دورية</option>
+        <option>دعم مبدئي يحتاج إلى تأكيد</option>
+        <option>غير واضح بعد</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل سيتوفّر فريق داخلي أو منسّق للعمل معنا أثناء المشروع؟ <span class="req">*</span></label>
+      <select name="internal_team" data-req>
+        <option value="">اختر…</option>
+        <option>نعم، فريق مخصّص للمشروع</option>
+        <option>نعم، منسّق واحد للتواصل</option>
+        <option>سيُحدّد لاحقًا</option>
+        <option>لا يوجد حاليًا</option>
+      </select>
+      <div class="err-msg">يرجى الاختيار</div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل سبق تعاملكم مع جهة استشارية في مشروع مشابه؟</label>
+      <select name="prev_consultant" id="prev_consultant">
+        <option value="">اختر…</option>
+        <option value="نعم">نعم</option>
+        <option value="لا">لا، هذه تجربتنا الأولى</option>
+      </select>
+      <div class="conditional" id="prev_consultant_block">
+        <div class="q" style="margin-bottom:6px">
+          <label class="q-label">كيف تصفون تلك التجربة وما الذي تتمنّون اختلافه هذه المرة؟</label>
+          <textarea name="prev_consultant_note" placeholder="ما الذي أعجبكم أو لم يعجبكم، وما تتطلّعون إليه الآن…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">كيف تقيّمون وضوح أهدافكم ومتابعتكم للأداء في المجالات التالية؟ <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:6px">اختاروا المستوى الأقرب لواقعكم في كل مجال.</p>
+      <div id="matrix">
+        <div class="q" style="margin-bottom:14px">
+          <label class="q-label" style="font-weight:500;font-size:16px">الجانب المالي <span class="hint">(الإيرادات والمصروفات والاستدامة)</span></label>
+          <select name="m_financial" class="m-sel"><option value="">اختر المستوى…</option><option>لا يوجد لدينا أهداف أو متابعة</option><option>بدايات بسيطة</option><option>موجود جزئيًا</option><option>واضح ومتابَع جيدًا</option></select>
+        </div>
+        <div class="q" style="margin-bottom:14px">
+          <label class="q-label" style="font-weight:500;font-size:16px">العملاء / المستفيدون <span class="hint">(الرضا وجودة الخدمة والأثر)</span></label>
+          <select name="m_customer" class="m-sel"><option value="">اختر المستوى…</option><option>لا يوجد لدينا أهداف أو متابعة</option><option>بدايات بسيطة</option><option>موجود جزئيًا</option><option>واضح ومتابَع جيدًا</option></select>
+        </div>
+        <div class="q" style="margin-bottom:14px">
+          <label class="q-label" style="font-weight:500;font-size:16px">سير العمل والعمليات <span class="hint">(كفاءة الإجراءات اليومية وجودتها)</span></label>
+          <select name="m_process" class="m-sel"><option value="">اختر المستوى…</option><option>لا يوجد لدينا أهداف أو متابعة</option><option>بدايات بسيطة</option><option>موجود جزئيًا</option><option>واضح ومتابَع جيدًا</option></select>
+        </div>
+        <div class="q" style="margin-bottom:4px">
+          <label class="q-label" style="font-weight:500;font-size:16px">الكوادر والقدرات <span class="hint">(الكفاءات والثقافة والأنظمة التقنية)</span></label>
+          <select name="m_learning" class="m-sel"><option value="">اختر المستوى…</option><option>لا يوجد لدينا أهداف أو متابعة</option><option>بدايات بسيطة</option><option>موجود جزئيًا</option><option>واضح ومتابَع جيدًا</option></select>
+        </div>
+      </div>
+      <div class="err-msg" id="matrix_err">يرجى تقييم المجالات الأربعة</div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">ما البيانات والوثائق المتوفرة لديكم للبدء؟ <span class="hint">(اختيار متعدد)</span></label>
+      <div class="choices grid" data-check="data_available">
+        <label class="chip"><input type="checkbox" name="data_available" value="خطة سابقة"><span>خطة سابقة</span></label>
+        <label class="chip"><input type="checkbox" name="data_available" value="هيكل تنظيمي"><span>هيكل تنظيمي</span></label>
+        <label class="chip"><input type="checkbox" name="data_available" value="تقارير أداء"><span>تقارير أداء</span></label>
+        <label class="chip"><input type="checkbox" name="data_available" value="بيانات مالية"><span>بيانات مالية</span></label>
+        <label class="chip"><input type="checkbox" name="data_available" value="دراسات مستفيدين"><span>دراسات مستفيدين</span></label>
+        <label class="chip"><input type="checkbox" name="data_available" value="لا يوجد"><span>لا يوجد توثيق كافٍ</span></label>
+      </div>
+      <div class="other-field show" style="margin-top:10px"><input type="text" name="data_available_other" placeholder="بيانات أخرى متوفرة (اختياري)…"></div>
+    </div>
+
+    <div class="q">
+      <label class="q-label">هل ترغبون في مقارنة وضعكم بجهات مشابهة؟ <span class="hint">(بناءً على البيانات المتاحة للعموم)</span></label>
+      <select name="benchmarking" id="benchmarking">
+        <option value="">اختر…</option><option value="نعم">نعم</option><option value="لا">لا</option>
+      </select>
+      <div class="conditional" id="bench_block">
+        <div class="q" style="margin-bottom:6px">
+          <label class="q-label">من أبرز الجهات التي تودّون المقارنة بها؟ <span class="hint">(اختياري — اذكروا 1–3)</span></label>
+          <textarea name="benchmark_targets" placeholder="أسماء الجهات أو المنافسين…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== أسئلة القطاع الخاص (بلا عنوان ظاهر) ===== -->
+    <div class="private-only" data-show="خاص">
+      <div class="q">
+        <label class="q-label">ما مستوى التفصيل المالي الذي تتوقعونه في التحليل؟</label>
+        <select name="financial_depth" id="financial_depth" data-other="financial_depth_other_f">
+          <option value="">اختر المستوى…</option>
+          <option>نظرة عامة — اتجاهات الإيرادات والمصروفات والأرباح للمنظمة ككل</option>
+          <option>متوسط — تحليل ربحية كل قناة بيع أو نشاط على حدة</option>
+          <option>تفصيلي — ربحية كل فرع وكل خط منتجات بالتفصيل</option>
+          <option value="أخرى">أخرى…</option>
+        </select>
+        <div class="other-field" id="financial_depth_other_f"><input type="text" name="financial_depth_other" placeholder="حدّد مستوى التفصيل المطلوب"></div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">هل البيانات المالية متاحة على مستوى كل فرع/قناة بشكل منفصل؟</label>
+        <select name="financial_granularity">
+          <option value="">اختر…</option>
+          <option>نعم، لكل فرع وقناة على حدة</option>
+          <option>على مستوى القنوات فقط (فروع مقابل إلكتروني)</option>
+          <option>بشكل إجمالي فقط</option>
+          <option>لا ينطبق</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <label class="q-label">هل ترغبون بنموذج مالي توقعي للسنوات القادمة (3–5 سنوات)؟</label>
+        <select name="financial_forecast">
+          <option value="">اختر…</option>
+          <option>نعم، نريد توقعات مالية مفصلة</option>
+          <option>لا، يكفي تحليل الوضع الحالي وتحديد الفرص</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <label class="q-label">ما المؤشرات المالية الأهم لكم لتحسينها؟ <span class="hint">(اختيار متعدد)</span></label>
+        <div class="choices grid" data-check="fin_priorities">
+          <label class="chip"><input type="checkbox" name="fin_priorities" value="صافي الربح"><span>صافي الربح</span></label>
+          <label class="chip"><input type="checkbox" name="fin_priorities" value="هامش الربح"><span>هامش الربح</span></label>
+          <label class="chip"><input type="checkbox" name="fin_priorities" value="التدفق النقدي"><span>التدفق النقدي</span></label>
+          <label class="chip"><input type="checkbox" name="fin_priorities" value="العائد على الفروع"><span>عائد الفروع</span></label>
+          <label class="chip"><input type="checkbox" name="fin_priorities" value="خفض التكاليف"><span>خفض التكاليف</span></label>
+        </div>
+        <div class="other-field show" style="margin-top:10px"><input type="text" name="fin_priorities_other" placeholder="مؤشر آخر (اختياري)…"></div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">ما العمق المطلوب في تقييم أداء الفروع؟</label>
+        <select name="branch_depth" id="branch_depth" data-other="branch_depth_other_f">
+          <option value="">اختر…</option>
+          <option>تصنيف عام (ممتاز / متوسط / ضعيف) حسب الإيرادات</option>
+          <option>تحليل تفصيلي (زوار، معدل تحويل، متوسط الفاتورة، إنتاجية الموظف)</option>
+          <option>ورش عمل ميدانية مع مدراء الفروع</option>
+          <option>لا ينطبق (لا توجد فروع)</option>
+          <option value="أخرى">أخرى…</option>
+        </select>
+        <div class="other-field" id="branch_depth_other_f"><input type="text" name="branch_depth_other" placeholder="حدّد العمق المطلوب"></div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">ما الأنظمة التقنية المستخدمة لديكم؟ <span class="hint">(اختيار متعدد)</span></label>
+        <div class="choices grid" data-check="systems">
+          <label class="chip"><input type="checkbox" name="systems" value="ERP"><span>نظام موارد (ERP)</span></label>
+          <label class="chip"><input type="checkbox" name="systems" value="POS"><span>نقاط بيع (POS)</span></label>
+          <label class="chip"><input type="checkbox" name="systems" value="CRM"><span>إدارة عملاء (CRM)</span></label>
+          <label class="chip"><input type="checkbox" name="systems" value="متجر إلكتروني"><span>متجر إلكتروني</span></label>
+          <label class="chip"><input type="checkbox" name="systems" value="إدارة مخزون"><span>إدارة مخزون</span></label>
+          <label class="chip"><input type="checkbox" name="systems" value="لا يوجد"><span>أنظمة محدودة</span></label>
+        </div>
+        <div class="other-field show" style="margin-top:10px"><input type="text" name="systems_other" placeholder="نظام آخر (اختياري)…"></div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">أين تشعرون أن التحدي الأكبر حاليًا؟</label>
+        <select name="main_challenge" id="main_challenge" data-other="main_challenge_other_f">
+          <option value="">اختر…</option>
+          <option>المبيعات داخل الفروع</option>
+          <option>التجارة الإلكترونية والقنوات الرقمية</option>
+          <option>سلسلة التوريد والمخزون</option>
+          <option>التسويق واكتساب العملاء</option>
+          <option>الكوادر والكفاءات</option>
+          <option value="أخرى">أخرى…</option>
+        </select>
+        <div class="other-field" id="main_challenge_other_f"><input type="text" name="main_challenge_other" placeholder="حدّد التحدي الأكبر"></div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">من أبرز منافسيكم المباشرين؟ <span class="hint">(اختياري — اذكروا 1–3)</span></label>
+        <textarea name="competitors" placeholder="أسماء المنافسين الأبرز محليًا أو إلكترونيًا…"></textarea>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-back" data-back>→ السابق</button>
+      <button type="button" class="btn btn-next" data-next>التالي ←</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 5 : لمسة أخيرة (أسئلة نوعية + مفتوح) ============ -->
+<section class="section" data-section="5">
+  <div class="card">
+    <div class="sec-head"><div class="sec-num">5</div><div class="sec-title">لمسة أخيرة</div></div>
+    <p class="sec-desc">أسئلة قصيرة تضبط التوقعات وتضمن أن نسلّم لكم ما تريدونه فعلًا.</p>
+
+    <!-- الاستبعاد -->
+    <div class="q">
+      <label class="q-label">هل هناك أمور تريدون استبعادها صراحة من نطاق المشروع؟</label>
+      <p class="hint" style="margin-bottom:8px">تحديد ما لا تريدونه يساعدنا على ضبط النطاق بدقة.</p>
+      <textarea name="out_of_scope" placeholder="مثال: لا نريد تقييم الموظفين، نكتفي بالجانب الاستراتيجي…"></textarea>
+    </div>
+
+    <!-- المستخدم -->
+    <div class="q">
+      <label class="q-label">بعد تسليم المشروع، من سيستخدم المخرج وكيف؟</label>
+      <select name="output_user" id="output_user" data-other="output_user_other_f">
+        <option value="">اختر…</option>
+        <option>أداة عمل يومية للإدارة والفرق</option>
+        <option>وثيقة لعرضها على مجلس الإدارة</option>
+        <option>مرجع للمتابعة وقياس الأداء</option>
+        <option>أساس لمشاريع ومبادرات قادمة</option>
+        <option value="أخرى">أخرى…</option>
+      </select>
+      <div class="other-field" id="output_user_other_f"><input type="text" name="output_user_other" placeholder="حدّد كيف سيُستخدم المخرج"></div>
+    </div>
+
+    <!-- مقياس الرضا (الأخطر) -->
+    <div class="q">
+      <label class="q-label">ما الشيء الواحد الذي إن لم يتحقق، ستعتبرون المشروع لم يحقق هدفه؟ <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:8px">أهم سؤال لنا: ما الذي يجب أن يتحقق حتمًا في نظركم؟</p>
+      <textarea name="must_have" data-req placeholder="اكتبوا الشرط الأهم لنجاح المشروع من وجهة نظركم…"></textarea>
+      <div class="err-msg">يرجى تحديد هذا الشرط</div>
+    </div>
+
+    <!-- سؤال مفتوح ختامي -->
+    <div class="q">
+      <label class="q-label">هل هناك أي شيء آخر تودّون إخبارنا به؟</label>
+      <p class="hint" style="margin-bottom:8px">أي ملاحظة أو سياق أو تطلّع لم تتطرّق له الأسئلة السابقة.</p>
+      <textarea name="open_notes" placeholder="مساحة حرة لكتابة ما تشاؤون…" style="min-height:110px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-back" data-back>→ السابق</button>
+      <span></span>
+    </div>
+    <button type="button" class="btn btn-submit" id="submitBtn">إرسال الاستبيان ↩</button>
+  </div>
+</section>
+
+</form>
+
+<div class="done-screen" id="done">
+  <div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <h2>تم استلام بياناتكم بنجاح</h2>
+  <p>شكرًا لكم. سيتواصل معكم فريق مُشار للاستشارات قريبًا بتصوّر مبدئي مناسب لمنظمتكم.</p>
+
+  <details style="max-width:640px;margin:0 auto 16px;text-align:right">
+    <summary style="cursor:pointer;color:var(--teal);font-weight:700;margin-bottom:12px">مؤشر الجاهزية — داخلي لفريق مُشار فقط</summary>
+    <div id="readinessCard" style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)"></div>
+  </details>
+
+  <details style="max-width:640px;margin:0 auto">
+    <summary style="cursor:pointer;color:var(--teal);font-weight:700;margin-bottom:12px">عرض ملخص الإجابات (JSON)</summary>
+    <div class="json-box" id="jsonOut"></div>
+  </details>
+</div>
+
+<footer>
+  <div class="footer-portfolio">محفظة الاستراتيجية والتحول</div>
+  © مُشار للاستشارات — بوصلة الاستراتيجية
+</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://cynprgpbaixejaodrncw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_OIcnonE_w4BTuKrRez55NA_3ZCUUaes";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const WEBHOOK_URL = ""; // ضع رابط n8n هنا لاحقًا
+const FALLBACK_EMAIL = "info@mushar.sa";
+
+const form=document.getElementById('form');
+const sections=[...document.querySelectorAll('.section')];
+const steps=[...document.querySelectorAll('.step')];
+const stepperFill=document.getElementById('stepperFill');
+const TOTAL=5; let current=1;
+
+function showSection(n){
+  sections.forEach(s=>s.classList.toggle('show',+s.dataset.section===n));
+  steps.forEach(p=>{const s=+p.dataset.s;p.classList.toggle('active',s===n);p.classList.toggle('done',s<n)});
+  // تعبئة خط التقدم بين الدوائر (المسافة الفعّالة 84% بين أول وآخر دائرة)
+  const pct=(n-1)/(TOTAL-1);
+  stepperFill.style.width=(pct*84)+'%';
+  current=n; window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{if(validateSection(current))showSection(current+1)}));
+document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>showSection(current-1)));
+
+document.querySelectorAll('select[data-other]').forEach(sel=>{
+  sel.addEventListener('change',e=>{document.getElementById(e.target.dataset.other).classList.toggle('show', e.target.value==='أخرى')});
+});
+
+document.getElementById('entity_type').addEventListener('change',e=>{
+  const isPrivate=e.target.value==='خاص';
+  document.querySelectorAll('.private-only[data-show="خاص"]').forEach(el=>{el.style.display=isPrivate?'block':'none'});
+});
+
+function bindYes(selId,blockId){
+  document.getElementById(selId).addEventListener('change',e=>{document.getElementById(blockId).classList.toggle('show', e.target.value==='نعم')});
+}
+bindYes('has_branches','branches_block');
+bindYes('has_vision','vision_block');
+bindYes('prev_strategy','prev_block');
+bindYes('benchmarking','bench_block');
+if(document.getElementById('group_structure')) bindYes('group_structure','group_block');
+if(document.getElementById('prev_consultant')) bindYes('prev_consultant','prev_consultant_block');
+
+function clearErr(el){el.classList.remove('err');const m=el.closest('.q')?.querySelector('.err-msg');if(m)m.style.display='none'}
+function setErr(el){el.classList.add('err');const m=el.closest('.q')?.querySelector('.err-msg');if(m)m.style.display='block'}
+function validateSection(n){
+  const sec=sections.find(s=>+s.dataset.section===n);
+  let ok=true,firstBad=null;
+  sec.querySelectorAll('[data-req]').forEach(el=>{
+    if(el.offsetParent===null) return;
+    let bad=!el.value.trim();
+    if(el.type==='email'&&el.value) bad=!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value);
+    if(bad){setErr(el);ok=false;firstBad=firstBad||el} else clearErr(el);
+  });
+  if(n===4){
+    const persp=['m_financial','m_customer','m_process','m_learning'];
+    const allDone=persp.every(p=>sec.querySelector(`[name="${p}"]`).value);
+    document.getElementById('matrix_err').style.display=allDone?'none':'block';
+    if(!allDone){ok=false;firstBad=firstBad||document.getElementById('matrix')}
+  }
+  if(!ok&&firstBad) firstBad.scrollIntoView({behavior:'smooth',block:'center'});
+  return ok;
+}
+
+
+/* ====== مؤشر الجاهزية الداخلي (لمشار فقط — لا يراه العميل) ====== */
+function computeReadiness(d){
+  let score=0; const notes=[];
+  // الميزانية (وزن عالٍ)
+  if(d.budget==='نعم، معتمدة'){score+=20} else if(d.budget==='قيد الاعتماد'){score+=10; notes.push('الميزانية قيد الاعتماد')} else {notes.push('لا توجد ميزانية معتمدة')}
+  // التزام القيادة (وزن عالٍ)
+  const lc=d.leadership_commitment||'';
+  if(lc.includes('كامل')){score+=20} else if(lc.includes('جيد')){score+=14} else if(lc.includes('مبدئي')){score+=7; notes.push('التزام القيادة يحتاج تأكيدًا')} else {notes.push('التزام القيادة غير واضح')}
+  // جهة الاعتماد محددة
+  if(d.approver && d.approver!=='غير محدد بعد'){score+=10} else {notes.push('جهة الاعتماد غير محددة')}
+  // فريق داخلي
+  const it=d.internal_team||'';
+  if(it.includes('فريق مخصّص')){score+=15} else if(it.includes('منسّق')){score+=10} else if(it.includes('لاحقًا')){score+=4; notes.push('الفريق الداخلي سيُحدّد لاحقًا')} else {notes.push('لا يوجد فريق داخلي')}
+  // توفّر الفريق
+  const ta=d.team_availability||'';
+  if(ta.includes('جيد')){score+=15} else if(ta.includes('معقول')){score+=10} else if(ta.includes('محدود')){score+=4; notes.push('توفّر الفريق محدود')} else {notes.push('توفّر الفريق غير محدد')}
+  // وضوح الهدف والقرارات
+  if(d.strategy_goal && d.strategy_goal!=='أخرى'){score+=8}
+  if(d.key_decisions && d.key_decisions.length>15){score+=7} else {notes.push('القرارات المتوقعة غير واضحة')}
+  // البيانات المتاحة
+  const da=Array.isArray(d.data_available)?d.data_available:[];
+  if(da.length && !da.includes('لا يوجد')){score+=5} else {notes.push('لا يوجد توثيق كافٍ للبدء')}
+  if(score>100)score=100;
+  let level,color;
+  if(score>=75){level='جاهزية عالية';color='#2e8b6f'}
+  else if(score>=50){level='جاهزية متوسطة';color='#c79a3e'}
+  else {level='جاهزية منخفضة — يحتاج تهيئة';color='#d9534f'}
+  return {score,level,color,notes};
+}
+
+function collect(){
+  const fd=new FormData(form); const data={};
+  for(const [k,v] of fd.entries()){ if(data[k]){data[k]=[].concat(data[k],v)} else {data[k]=v} }
+  ['regions','data_available','fin_priorities','systems','sales_channels','stakeholders'].forEach(k=>{
+    data[k]=[...form.querySelectorAll(`input[name="${k}"]:checked`)].map(i=>i.value);
+  });
+  data._submittedAt=new Date().toISOString();
+  data._readiness=computeReadiness(data);
+  return data;
+}
+
+document.getElementById('submitBtn').addEventListener('click',async()=>{
+  if(!validateSection(5)) return;
+  const data=collect();
+  document.getElementById('jsonOut').textContent=JSON.stringify(data,null,2);
+  // حفظ في Supabase
+  const rd=data._readiness||{};
+  const row={
+    contact_name:data.contact_name, contact_title:data.contact_title, contact_email:data.contact_email, contact_phone:data.contact_phone,
+    entity_name:data.entity_name, entity_type:data.entity_type, sector:data.sector, founded:data.founded, employees:data.employees,
+    capital:data.capital, hq_city:data.hq_city, has_branches:data.has_branches, branches_count:data.branches_count, regions:data.regions||[], has_ecommerce:data.has_ecommerce,
+    biz_offering:data.biz_offering, biz_description:data.biz_description, has_manufacturing:data.has_manufacturing, suppliers:data.suppliers,
+    group_structure:data.group_structure, group_count:data.group_count, customer_type:data.customer_type, customer_base:data.customer_base, sales_channels:data.sales_channels||[],
+    strategy_goal:data.strategy_goal, requester:data.requester, approver:data.approver, key_decisions:data.key_decisions, success_vision:data.success_vision,
+    pain_point:data.pain_point, horizon:data.horizon, budget:data.budget, deadline:data.deadline||null, stakeholders:data.stakeholders||[], team_availability:data.team_availability,
+    has_vision:data.has_vision, vision_update:data.vision_update, prev_strategy:data.prev_strategy, prev_reason:data.prev_reason,
+    leadership_commitment:data.leadership_commitment, internal_team:data.internal_team, prev_consultant:data.prev_consultant, prev_consultant_note:data.prev_consultant_note,
+    m_financial:data.m_financial, m_customer:data.m_customer, m_process:data.m_process, m_learning:data.m_learning,
+    data_available:data.data_available||[], benchmarking:data.benchmarking, benchmark_targets:data.benchmark_targets, challenges:data.challenges,
+    financial_depth:data.financial_depth, financial_granularity:data.financial_granularity, financial_forecast:data.financial_forecast,
+    fin_priorities:data.fin_priorities||[], branch_depth:data.branch_depth, systems:data.systems||[], main_challenge:data.main_challenge, competitors:data.competitors,
+    out_of_scope:data.out_of_scope, output_user:data.output_user, must_have:data.must_have, open_notes:data.open_notes,
+    readiness_score:rd.score, readiness_level:rd.level, readiness_notes:rd.notes||[],
+    raw:data
+  };
+  const btn=document.getElementById('submitBtn'); btn.disabled=true; btn.textContent='جارٍ الإرسال…';
+  try{
+    const {error}=await sb.from('submissions').insert(row);
+    if(error) throw error;
+  }catch(e){
+    console.error(e);
+    btn.disabled=false; btn.textContent='إرسال الاستبيان ↩';
+    alert('تعذّر الإرسال. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.');
+    return;
+  }
+  // عرض بطاقة الجاهزية بعد نجاح الحفظ
+  if(rd && rd.score!=null){
+    const notesHtml = (rd.notes&&rd.notes.length)
+      ? '<div style="margin-top:14px"><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:var(--ink)">نقاط تحتاج انتباهًا:</div><ul style="margin:0;padding-inline-start:18px;color:var(--muted);font-size:14px;line-height:1.9">'+rd.notes.map(n=>'<li>'+n+'</li>').join('')+'</ul></div>'
+      : '<div style="margin-top:12px;color:#2e8b6f;font-size:14px;font-weight:600">لا توجد ملاحظات جوهرية — المؤشرات إيجابية.</div>';
+    document.getElementById('readinessCard').innerHTML=
+      '<div style="display:flex;align-items:center;gap:16px">'+
+        '<div style="width:74px;height:74px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-weight:800;font-size:22px;background:'+rd.color+'">'+rd.score+'</div>'+
+        '<div><div style="font-weight:800;font-size:18px;color:'+rd.color+'">'+rd.level+'</div>'+
+        '<div style="color:var(--muted);font-size:13px;margin-top:2px">درجة الجاهزية من 100 — تقدير مبدئي يساعد على تحديد الأولوية وحجم المشروع</div></div>'+
+      '</div>'+notesHtml;
+  }
+  form.style.display='none';
+  document.querySelector('.progress-shell').style.display='none';
+  document.getElementById('done').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>
